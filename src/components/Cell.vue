@@ -15,8 +15,8 @@ export default {
 
 <style>
 .cell {
-  width: 15px;
-  height: 15px;
+  width: 14px;
+  height: 14px;
   border: 1px solid rgb(158, 158, 158);
 }
 .aliveCell {
