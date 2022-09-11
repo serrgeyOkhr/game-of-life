@@ -6,9 +6,9 @@ export default class Life {
   #grid = ref();
   #play = false
   constructor(width, height) {
-    this.#width = width,
-      this.#height = height
-    this.#grid.value = this.#resetGrid()
+    this.#width = width;
+    this.#height = height;
+    this.#grid.value = this.#cleanGrid();
   }
 
   get showGrid() {
@@ -23,14 +23,43 @@ export default class Life {
   get isPlay() {
     return this.#play;
   }
-  get reset() {
-    return this.#grid.value = this.#resetGrid();
+  get clean() {
+    return this.#grid.value = this.#cleanGrid();
   }
 
-  toggleCellState(x,y) {
-    this.#grid.value[x][y] = Number(!this.#grid.value[x][y])
+  #cleanGrid() {
+    let grid = this.#createGrid()
+    for (let i = 0; i < this.#width; i++) {
+      for (let j = 0; j < this.#height; j++) {
+        grid[i][j] = false
+      }
+    }
+    return grid;
   }
 
+  play() {
+    this.#grid.value = this.#nextGeneration()
+  }
+
+  #nextGeneration() {
+    let grid = this.#createGrid();
+    for (let i = 0; i < this.#width; i++) {
+      for (let j = 0; j < this.#height; j++) {
+        let neighbor = this.#getAliveNeighbor(i, j);
+        if (neighbor === 0) continue;
+        if (this.#grid.value[i][j] === true && (neighbor === 2 || neighbor === 3)) {
+          grid[i][j] = true
+        }
+        else if (this.#grid.value[i][j] === false && neighbor === 3) {
+          grid[i][j] = true
+        }
+        else {
+          grid[i][j] = false
+        }
+      }
+    }
+    return grid;
+  }
   #createGrid() {
     let grid = new Array(this.#width)
     for (let index = 0; index < grid.length; index++) {
@@ -38,57 +67,28 @@ export default class Life {
     }
     return grid
   }
-  #resetGrid() {
-    let grid = this.#createGrid()
-    for (let i = 0; i < this.#width; i++) {
-      for (let j = 0; j < this.#height; j++) {
-        grid[i][j] = 0
+  #getAliveNeighbor(x, y) {
+    let neighborCount = 0;
+    for (let i = -1; i < 2; i++) {
+      for (let j = -1; j < 2; j++) {
+        if (i === 0 && j === 0) continue
+        if (typeof (this.#grid.value[x + i]) === "undefined") continue
+        if (typeof (this.#grid.value[y + j]) === "undefined") continue
+        if (this.#grid.value[x + i][y + j]) neighborCount += 1
       }
     }
-    return grid;
-  }
-
-  getCellValue(x, y) {
-    return this.#grid.value[x][y]
-  }
-
-  play() {
-    this.#grid.value = this.#nextGeneration()
+    return neighborCount
   }
 
   setGrid(grid) {
     this.#grid.value = grid
   }
 
-  #nextGeneration() {
-    let grid = this.#createGrid();
-    for (let i = 0; i < this.#width; i++) {
-      for (let j = 0; j < this.#height; j++) {
-        let neighbor = this.#getAllNeighbor(i, j);
-        if (this.#grid.value[i][j] === 1 && (neighbor === 2 || neighbor === 3)) {
-          grid[i][j] = 1
-        }
-        else if (this.#grid.value[i][j] === 0 && neighbor === 3) {
-          grid[i][j] = 1
-        }
-        else {
-          grid[i][j] = 0
-        }
-      }
-    }
-    return grid;
+  toggleCellState(x, y) {
+    this.#grid.value[x][y] = !this.#grid.value[x][y]
+  }
+  getCellValue(x, y) {
+    return this.#grid.value[x][y]
   }
 
-  #getAllNeighbor(x, y) {
-    let neighborCount = 0;
-    ((x - 1 > 0) && (y - 1 > 0) && this.#grid.value[x - 1][y - 1]) ? neighborCount += 1 : null;
-    ((x - 1 > 0) && this.#grid.value[x - 1][y]) ? neighborCount += 1 : null;
-    ((x - 1 > 0) && (y + 1 < this.#height) && this.#grid.value[x - 1][y + 1]) ? neighborCount += 1 : null;
-    ((y - 1 > 0) && this.#grid.value[x][y - 1]) ? neighborCount += 1 : null;
-    ((y + 1 < this.#height) && this.#grid.value[x][y + 1]) ? neighborCount += 1 : null;
-    ((x + 1 < this.#width) && (y - 1 > 0) && this.#grid.value[x + 1][y - 1]) ? neighborCount += 1 : null;
-    ((x + 1 < this.#width) && this.#grid.value[x + 1][y]) ? neighborCount += 1 : null;
-    ((x + 1 < this.#width) && (y + 1 < this.#height) && this.#grid.value[x + 1][y + 1]) ? neighborCount += 1 : null;
-    return neighborCount
-  }
 }

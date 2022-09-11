@@ -35,12 +35,12 @@
         >
           Clean
         </button>
-        <button
+        <!-- <button
           class="btn"
           @click="logBoard"
         >
           Log Board
-        </button>
+        </button> -->
       </div>
       <div class="boardContainer">
         <div
@@ -74,12 +74,12 @@
     name: 'board-grid',
     setup() {
       const play = ref(false);
-      const newLife = new Life(60, 40);
-      let qq = [[]];
+      const newLife = new Life(100, 45);
+      let boardCash = [[]];
 
       function startGame() {
         play.value = true;
-        qq = newLife.showGrid;
+        boardCash = newLife.showGrid;
         loop();
       }
 
@@ -91,12 +91,12 @@
         newLife.play();
       }
       function resetGame() {
-        if (qq.length > 1) {
-          newLife.setGrid(qq);
+        if (boardCash.length > 1) {
+          newLife.setGrid(boardCash);
         }
       }
       function cleanBoardGame() {
-        newLife.reset;
+        newLife.clean;
       }
       function loop() {
         if (!play.value) return;
@@ -161,6 +161,7 @@
     padding: 15px;
     border-bottom-left-radius: 19px;
     border-bottom-right-radius: 19px;
+    overflow: hidden;
   }
   .btn {
     font-size: 16px;
