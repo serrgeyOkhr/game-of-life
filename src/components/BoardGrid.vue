@@ -41,6 +41,21 @@
         >
           Log Board
         </button> -->
+        <div class="speedControl">
+          <label
+            class="speedControlLabel"
+            for="gameSpeed"
+            >Скорость игры</label
+          >
+          <div>
+            <input
+              id="gameSpeed"
+              type="number"
+              v-model="gameSpeed"
+            />
+            <span>ms</span>
+          </div>
+        </div>
       </div>
       <div class="boardContainer">
         <div
@@ -74,6 +89,7 @@
     name: 'board-grid',
     setup() {
       const play = ref(false);
+      const gameSpeed = ref(200);
       const newLife = new Life(100, 45);
       let boardCash = [[]];
 
@@ -101,14 +117,14 @@
       function loop() {
         if (!play.value) return;
         loopStep();
-        setTimeout(loop, 200);
+        setTimeout(loop, gameSpeed.value);
       }
       function changeCellState(x, y) {
         // console.log(`x: ${x}, y: ${y}`);
-        newLife.toggleCellState(x,y);
+        newLife.toggleCellState(x, y);
       }
-      function logBoard () {
-        console.log(newLife.showGrid)
+      function logBoard() {
+        console.log(newLife.showGrid);
       }
       return {
         newLife,
@@ -119,6 +135,7 @@
         loopStep,
         cleanBoardGame,
         logBoard,
+        gameSpeed,
       };
     },
   };
@@ -134,12 +151,28 @@
     overflow: hidden;
     /* margin: 15px; */
   }
+  #gameSpeed {
+    margin-left: 5px;
+    width: 50px;
+  }
+  #gameSpeed:focus-visible {
+    text-decoration: none;
+    outline: none;
+  }
+  .speedControl {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
   .boardContainer {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-wrap: nowrap;
     padding: 5px;
+    margin: 5px;
   }
   .controlPanel {
     display: flex;
@@ -178,12 +211,37 @@
     border: 1px solid rgb(48, 48, 48);
   }
   .cell {
-  width: 14px;
-  height: 14px;
-  border: 1px solid rgb(158, 158, 158);
-  background-color: #fff;
-}
-.aliveCell {
-  background-color: #000;
-}
+    width: 14px;
+    height: 14px;
+    border: 1px solid rgb(158, 158, 158);
+    background-color: #fff;
+  }
+  .aliveCell {
+    background-color: #000;
+  }
+  @media screen and (max-width: 600px) {
+    .cell {
+      width: 13px;
+      height: 13px;
+    }
+    .headingTitle {
+      font-size: 20px;
+    }
+    .btn {
+      /* font-size: 12px; */
+    }
+    .speedControlLabel {
+      /* font-size: 12px; */
+    }
+    .controlPanel {
+      display: flex;
+      padding: 5px 0;
+      justify-content: center;
+      flex-wrap: wrap-reverse;
+    }
+    .speedControl {
+      flex-direction: row;
+      margin-bottom: 5px;
+    }
+  }
 </style>

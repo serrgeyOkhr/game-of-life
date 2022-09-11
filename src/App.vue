@@ -23,12 +23,9 @@
     background-color: #2c3e50;
     box-sizing: border-box;
     /* margin-top: 60px; */
-    height: 100vh;
+    min-height: 100vh;
     width: 100%;
     padding: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
   body {
     padding: 0;
