@@ -27,13 +27,19 @@
           class="btn"
           @click="loopStep"
         >
-          next Step
+          Next
         </button>
         <button
           class="btn"
           @click="cleanBoardGame"
         >
-          Clean board
+          Clean
+        </button>
+        <button
+          class="btn"
+          @click="logBoard"
+        >
+          Log Board
         </button>
       </div>
       <div class="boardContainer">
@@ -47,10 +53,13 @@
             :key="index"
             class="boardCell"
           >
-            <CellVue
-              @click="getCellID(column - 1, row - 1)"
-              :isAlive="newLife.getCellValue(column - 1, row - 1)"
-            />
+            <div
+              @click="changeCellState(column - 1, row - 1)"
+              class="cell"
+              :class="{
+                aliveCell: newLife.getCellValue(column - 1, row - 1),
+              }"
+            ></div>
           </div>
         </div>
       </div>
@@ -61,14 +70,9 @@
 <script>
   import { ref } from '@vue/reactivity';
   import Life from '../life';
-  import CellVue from './Cell.vue';
   export default {
     name: 'board-grid',
-    components: {
-      CellVue,
-    },
     setup() {
-      const field = ref([[]]);
       const play = ref(false);
       const newLife = new Life(60, 40);
       let qq = [[]];
@@ -99,20 +103,22 @@
         loopStep();
         setTimeout(loop, 200);
       }
-      function getCellID(x, y) {
+      function changeCellState(x, y) {
         // console.log(`x: ${x}, y: ${y}`);
-        newLife.getCellValue(x, y)
-          ? newLife.setDeadCell(x, y)
-          : newLife.setAliveCell(x, y);
+        newLife.toggleCellState(x,y);
+      }
+      function logBoard () {
+        console.log(newLife.showGrid)
       }
       return {
         newLife,
         startGame,
         stopGame,
         resetGame,
-        getCellID,
+        changeCellState,
         loopStep,
         cleanBoardGame,
+        logBoard,
       };
     },
   };
@@ -160,6 +166,7 @@
     font-size: 16px;
     padding: 5px 10px;
     margin: 0 5px;
+    /* min-width: 100px; */
     background-color: #fff;
     border: 1px solid rgb(60, 60, 60);
     border-radius: 5px;
@@ -169,5 +176,13 @@
     background-color: rgb(240, 240, 240);
     border: 1px solid rgb(48, 48, 48);
   }
-
+  .cell {
+  width: 14px;
+  height: 14px;
+  border: 1px solid rgb(158, 158, 158);
+  background-color: #fff;
+}
+.aliveCell {
+  background-color: #000;
+}
 </style>

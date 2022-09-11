@@ -27,11 +27,8 @@ export default class Life {
     return this.#grid.value = this.#resetGrid();
   }
 
-  setAliveCell(x, y) {
-    this.#grid.value[x][y] = 1
-  }
-  setDeadCell(x, y) {
-    this.#grid.value[x][y] = 0
+  toggleCellState(x,y) {
+    this.#grid.value[x][y] = Number(!this.#grid.value[x][y])
   }
 
   #createGrid() {
@@ -67,10 +64,11 @@ export default class Life {
     let grid = this.#createGrid();
     for (let i = 0; i < this.#width; i++) {
       for (let j = 0; j < this.#height; j++) {
-        if (this.#grid.value[i][j] === 1 && (this.#getAllNeighbor(i, j) === 2 || this.#getAllNeighbor(i, j) === 3)) {
+        let neighbor = this.#getAllNeighbor(i, j);
+        if (this.#grid.value[i][j] === 1 && (neighbor === 2 || neighbor === 3)) {
           grid[i][j] = 1
         }
-        else if (this.#grid.value[i][j] === 0 && this.#getAllNeighbor(i, j) === 3) {
+        else if (this.#grid.value[i][j] === 0 && neighbor === 3) {
           grid[i][j] = 1
         }
         else {
@@ -85,12 +83,12 @@ export default class Life {
     let neighborCount = 0;
     ((x - 1 > 0) && (y - 1 > 0) && this.#grid.value[x - 1][y - 1]) ? neighborCount += 1 : null;
     ((x - 1 > 0) && this.#grid.value[x - 1][y]) ? neighborCount += 1 : null;
-    ((x - 1 > 0) && (y + 1 < this.#width) && this.#grid.value[x - 1][y + 1]) ? neighborCount += 1 : null;
+    ((x - 1 > 0) && (y + 1 < this.#height) && this.#grid.value[x - 1][y + 1]) ? neighborCount += 1 : null;
     ((y - 1 > 0) && this.#grid.value[x][y - 1]) ? neighborCount += 1 : null;
-    ((y + 1 < this.#width) && this.#grid.value[x][y + 1]) ? neighborCount += 1 : null;
-    ((x + 1 < this.#height) && (y - 1 > 0) && this.#grid.value[x + 1][y - 1]) ? neighborCount += 1 : null;
-    ((x + 1 < this.#height) && this.#grid.value[x + 1][y]) ? neighborCount += 1 : null;
-    ((x + 1 < this.#height) && (y + 1 < this.#width) && this.#grid.value[x + 1][y + 1]) ? neighborCount += 1 : null;
+    ((y + 1 < this.#height) && this.#grid.value[x][y + 1]) ? neighborCount += 1 : null;
+    ((x + 1 < this.#width) && (y - 1 > 0) && this.#grid.value[x + 1][y - 1]) ? neighborCount += 1 : null;
+    ((x + 1 < this.#width) && this.#grid.value[x + 1][y]) ? neighborCount += 1 : null;
+    ((x + 1 < this.#width) && (y + 1 < this.#height) && this.#grid.value[x + 1][y + 1]) ? neighborCount += 1 : null;
     return neighborCount
   }
 }
