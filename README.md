@@ -1,19 +1,23 @@
-# game-of-life
+# Game of life
 
-## Project setup
-```
-npm install
-```
+Моя реализация игры, придуманный английским математиком Джоном Конвеем в 1970 году. 
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Правила игры
 
-### Compiles and minifies for production
-```
-npm run build
-```
+В мёртвой клетке зарождается жизнь, если с ней соседствуют три живые клетки
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Живая клетка остаеся живой, если с ней соседствуют две или три живые клетки. В противном случае умирает
+
+## Демо
+
+Посмотреть [Демо проект](https://game-of-life-app-098.herokuapp.com/)
+
+## Стек технологий
+
+Язык: JavaScript
+
+Фреймворк: Vue 3
+
+Бэкенд для хостинга приложения: Node.JS + express
+
+Хост: Heroku
